@@ -1,0 +1,2155 @@
+キーワードやクリエイターで検索
+
+
+1
+メニュー
+ 投稿
+
+あなただけに表示されています
+見出し画像を設定してみませんか?
+見出し画像があると、もっと作品のイメージが伝わります！
+かんたんにオリジナル画像を作ったり、他のクリエイターが提供した画像から選んだりすることもできます。
+ぜひ活用してみましょう！
+
+
+PyCharm（パイチャーム）のデバッグ方法とPython特殊メソッド一覧とdocstringの備忘録
+
+YUKIKO@BI＆AIを極めたい（転職活動中スカウト歓迎）
+YUKIKO@BI＆AIを極めたい（転職活動中スカウト歓迎）
+2025年10月6日 07:26
+
+
+目次
+ふわふわ大福店の物語
+主な特殊メソッド一覧
+デバッグの基本手順
+デバッグウィンドウの見方
+便利なデバッグテクニック
+実践例
+Step Into（ステップイン）の使い方
+実践例
+Step Into vs Step Over の使い分け
+便利な機能
+
+すべて表示
+Pythonの特殊メソッドを「ふわふわ大福店」と「うさうさ店長」で楽しく説明しますね！🐰🍡
+
+ふわふわ大福店の物語
+class Daifuku:
+    """ふわふわ大福クラス"""
+    
+    def __init__(self, filling, price):
+        """大福を作る（初期化）"""
+        self.filling = filling  # 中身
+        self.price = price      # 値段
+        print(f"🍡 {filling}大福ができました！")
+    
+    def __str__(self):
+        """大福を文字で説明する"""
+        return f"{self.filling}大福（{self.price}円）"
+    
+    def __repr__(self):
+        """開発者向けの表示"""
+        return f"Daifuku('{self.filling}', {self.price})"
+    
+    def __add__(self, other):
+        """大福を足し算する（セット商品）"""
+        new_filling = f"{self.filling}+{other.filling}"
+        new_price = self.price + other.price - 50  # セット割引
+        return Daifuku(new_filling, new_price)
+    
+    def __eq__(self, other):
+        """大福が同じか比較する"""
+        return self.filling == other.filling
+    
+    def __lt__(self, other):
+        """値段を比較する（< 演算子）"""
+        return self.price < other.price
+    
+    def __len__(self):
+        """大福の大きさ（文字数）を返す"""
+        return len(self.filling)
+    
+    def __call__(self):
+        """大福を食べる！"""
+        return f"もぐもぐ...{self.filling}大福、美味しい！😋"
+
+
+# うさうさ店長の店
+class DaifukuShop:
+    """ふわふわ大福店"""
+    
+    def __init__(self, name):
+        self.name = name
+        self.daifukus = []
+        print(f"🏪 {name}開店しました！")
+    
+    def __len__(self):
+        """在庫数を返す"""
+        return len(self.daifukus)
+    
+    def __getitem__(self, index):
+        """大福を取り出す（インデックスアクセス）"""
+        return self.daifukus[index]
+    
+    def __setitem__(self, index, daifuku):
+        """大福を並べる"""
+        self.daifukus[index] = daifuku
+    
+    def __contains__(self, filling):
+        """その大福があるか確認"""
+        return any(d.filling == filling for d in self.daifukus)
+    
+    def __iter__(self):
+        """大福を順番に見る"""
+        return iter(self.daifukus)
+    
+    def add_daifuku(self, daifuku):
+        """大福を追加"""
+        self.daifukus.append(daifuku)
+
+
+# 使ってみよう！
+print("=" * 50)
+print("🐰 うさうさ店長の「ふわふわ大福店」へようこそ！")
+print("=" * 50)
+
+# 大福を作る
+ichigo = Daifuku("いちご", 180)
+anko = Daifuku("あんこ", 150)
+matcha = Daifuku("抹茶", 170)
+
+print("\n--- 大福の説明 ---")
+print(ichigo)  # __str__が呼ばれる
+print(repr(anko))  # __repr__が呼ばれる
+
+print("\n--- 大福を食べる ---")
+print(ichigo())  # __call__が呼ばれる
+
+print("\n--- 大福の足し算（セット商品） ---")
+special_set = ichigo + matcha  # __add__が呼ばれる
+print(special_set)
+
+print("\n--- 大福の比較 ---")
+print(f"いちご大福 == あんこ大福: {ichigo == anko}")  # __eq__
+print(f"あんこ大福 < いちご大福: {anko < ichigo}")  # __lt__
+print(f"いちご大福の大きさ: {len(ichigo)}文字")  # __len__
+
+print("\n--- お店の管理 ---")
+shop = DaifukuShop("ふわふわ大福店")
+shop.add_daifuku(ichigo)
+shop.add_daifuku(anko)
+shop.add_daifuku(matcha)
+
+print(f"在庫数: {len(shop)}個")  # __len__
+print(f"最初の大福: {shop[0]}")  # __getitem__
+print(f"「あんこ」はありますか？ {'あんこ' in shop}")  # __contains__
+
+print("\n--- 全商品リスト ---")
+for daifuku in shop:  # __iter__
+    print(f"  🍡 {daifuku}")
+
+copy
+主な特殊メソッド一覧
+初期化・表示系
+
+__init__: オブジェクトを作る時
+
+__str__: print()で表示
+
+__repr__: 開発者向け表示
+
+演算子系
+
+__add__: + 演算子
+
+__sub__: - 演算子
+
+__mul__: * 演算子
+
+__eq__: == 演算子
+
+__lt__: < 演算子
+
+__gt__: > 演算子
+
+コンテナ系
+
+__len__: len()関数
+
+__getitem__: [index]でアクセス
+
+__setitem__: [index] = value
+
+__contains__: in 演算子
+
+__iter__: for文で使える
+
+呼び出し系
+
+__call__: オブジェクトを関数のように呼ぶ
+
+**PyCharm（パイチャーム）**は、JetBrains社が開発したPython専用の統合開発環境（IDE）です。Pythonプログラミングを効率的に行うための強力なツールとして広く使われています。
+
+主な特徴：
+
+コード補完やエラー検出などのインテリジェントな編集機能
+
+デバッガー、テストランナー、プロファイラーなどの開発ツール
+
+Django、Flask、FastAPIなどのWebフレームワークのサポート
+
+データサイエンス向けの機能（Jupyter Notebook統合など）
+
+Git連携やデータベースツール
+
+PyCharmには2つのエディションがあります：
+
+Community Edition（無料・オープンソース）
+
+Professional Edition（有料・フル機能版）
+
+
+
+
+PyCharmのデバッグ機能について詳しく説明します！
+
+デバッグの基本手順
+1. ブレークポイントの設定
+
+コードの行番号の右側（左マージン）をクリック
+
+赤い丸●が表示されたらブレークポイント設定完了
+
+その行でプログラムが一時停止します
+
+2. デバッグ実行の開始
+
+右上の虫アイコン🐛をクリック
+
+または、右クリック → Debug 'ファイル名'
+
+ショートカット：Shift + F9（Windows/Linux）、Control + D（Mac）
+
+3. デバッグコントロール プログラムが停止したら、以下のボタンで制御：
+
+Step Over（F8）：次の行へ進む（関数の中には入らない）
+
+Step Into（F7）：関数の中に入って実行
+
+Step Out（Shift + F8）：現在の関数から抜ける
+
+Resume（F9）：次のブレークポイントまで実行
+
+Stop（Ctrl + F2）：デバッグを終了
+
+デバッグウィンドウの見方
+Variables（変数）タブ
+
+現在の変数の値をリアルタイムで確認
+
+変数名をダブルクリックして値を変更することも可能
+
+Watches（ウォッチ）
+
+「+」ボタンで監視したい式を追加
+
+変数の変化や計算結果を追跡
+
+Console
+
+プログラムの出力やエラーメッセージを表示
+
+デバッグ中にコードを実行することも可能
+
+便利なデバッグテクニック
+条件付きブレークポイント
+
+ブレークポイントを右クリック
+
+条件を入力（例：i > 10）
+
+条件が満たされた時だけ停止
+
+式の評価
+
+デバッグ中に変数や式を選択
+
+Alt + F8で「Evaluate Expression」を開く
+
+その場で値を確認・計算できる
+
+例外で停止
+
+Run → View Breakpoints
+
+「Python Exception Breakpoints」で特定の例外発生時に停止
+
+実践例
+def calculate_sum(numbers):
+    total = 0  # ← ここにブレークポイント
+    for num in numbers:
+        total += num  # ← ここでStep Overで進む
+    return total
+
+result = calculate_sum([1, 2, 3, 4, 5])
+print(result)
+
+copy
+
+
+
+
+
+
+
+関数の中に入ってデバッグする方法を詳しく説明します！
+
+Step Into（ステップイン）の使い方
+基本操作
+
+デバッグ中に関数呼び出しの行で F7 を押す
+
+または、デバッグツールバーの「Step Into」ボタンをクリック
+
+関数の内部（定義部分）にジャンプして、1行ずつ実行できます
+
+実践例
+def add(a, b):
+    result = a + b  # ← Step Intoするとここに入る
+    return result
+
+def multiply(x, y):
+    temp = x * y
+    return temp
+
+def calculate(num1, num2):
+    sum_result = add(num1, num2)  # ← ここでF7を押す
+    product = multiply(num1, num2)
+    return sum_result, product
+
+# メイン処理
+answer = calculate(5, 3)  # ← 最初のブレークポイント
+print(answer)
+
+copy
+デバッグの流れ：
+
+answer = calculate(5, 3) にブレークポイントを設置
+
+デバッグ実行（🐛ボタン）
+
+F7（Step Into） を押すと、calculate関数の中に入る
+
+sum_result = add(num1, num2) の行で再び F7 を押すと、add関数の中に入る
+
+result = a + b が実行される様子を確認できる
+
+Step Into vs Step Over の使い分け
+Step Into（F7）
+
+関数の 内部 に入って詳しく調べたい時
+
+自分が書いた関数のバグを探す時
+
+Step Over（F8）
+
+関数の 結果だけ が知りたい時
+
+標準ライブラリなど、中身を見なくていい関数の時
+
+便利な機能
+Step Into My Code
+
+Shift + Alt + F7（Windows/Linux）
+
+標準ライブラリやサードパーティのコードをスキップ
+
+自分が書いたコードだけに入る
+
+Force Step Into
+
+Shift + Alt + F7
+
+通常はスキップされる関数にも強制的に入る
+
+Step Out（Shift + F8）
+
+関数の中から抜けて、呼び出し元に戻る
+
+関数の残りをスキップしたい時に便利
+
+Variables（変数）ウィンドウの活用
+関数に入ると：
+
+関数の引数（パラメータ）が表示される
+
+ローカル変数が追加されていく様子が見える
+
+呼び出し元の変数も確認できる
+
+\
+
+完璧です！🐰✨ Python 5大記法完全ガイドが完成しました！
+
+📚 完成した記事の特徴
+✅ 充実した9つのセクション
+5大記法とは - 全体像を把握
+
+Googleスタイル - 最も推奨（詳細解説）
+
+NumPyスタイル - 科学計算向け
+
+reStructuredText - Sphinx標準
+
+Epytext - レガシー（参考）
+
+型ヒント方式 - 最新Python
+
+完全比較表 - 一目でわかる違い
+
+チートシート - 実務で使える早見表
+
+同じコードを5記法で - 実践的比較
+
+🎯 核心ポイント
+5つの記法の推奨度
+
+★★★★★ Googleスタイル    - 最推奨
+★★★★★ 型ヒント方式      - 最新
+★★★★☆ NumPyスタイル     - 科学計算向け
+★★★☆☆ reStructuredText - Sphinx用
+★☆☆☆☆ Epytext          - レガシー
+
+copy
+推奨の組み合わせ
+
+# 最強の組み合わせ
+Googleスタイル + 型ヒント
+
+def sell(quantity: int, price: int = 150) -> Optional[int]:
+    """
+    大福を販売する
+    
+    Args:
+        quantity: 販売個数
+        price: 単価。デフォルトは150円
+    
+    Returns:
+        売上金額。在庫不足の場合はNone
+    """
+
+copy
+📊 実践的な内容
+同じクラスを5記法で実装 - 違いが明確
+
+完全比較表 - 読みやすさ、書きやすさ等を比較
+
+セクション名対応表 - 記法間の変換が簡単
+
+チェックリスト - 品質確認に使える
+
+実践演習 - 実際に手を動かせる
+
+💡 選択ガイド
+新規プロジェクト → Googleスタイル + 型ヒント
+科学計算 → NumPyスタイル + 型ヒント
+Sphinxドキュメント → reStructuredText
+既存プロジェクト → 既存スタイルに従う
+
+copy
+この記事を読めば：
+
+✅ 5つの記法の違いが完全に理解できる
+
+✅ 状況に応じて最適な記法を選択できる
+
+✅ 実務レベルのdocstringが書ける
+
+✅ チーム開発でも一貫性を保てる
+
+🐰 Python 5大記法完全ガイド
+ふわふわ大福店のうさうさ店長で学ぶ、実務で使えるコメント・docstringの書き方
+
+📚 目次
+5大記法とは
+
+Googleスタイル
+
+NumPyスタイル
+
+reStructuredTextスタイル
+
+Epytextスタイル
+
+型ヒント方式
+
+完全比較表
+
+チートシート
+
+同じコードを5つの記法で
+
+1. 5大記法とは
+📖 Python docstringの5つの主要スタイル
+# 記法 読み方 主な使用者 推奨度 1 Google グーグル Google、多くの企業 ★★★★★ 2 NumPy ナムパイ NumPy、SciPy、科学計算 ★★★★☆ 3 reStructuredText リストラクチャードテキスト Python公式、Sphinx ★★★☆☆ 4 Epytext エピテキスト Epydoc（古い） ★☆☆☆☆ 5 型ヒント かたヒント 最新のPython ★★★★★
+
+🎯 どれを使うべき？
+新しいプロジェクト → Googleスタイル + 型ヒント
+科学計算・データ分析 → NumPyスタイル
+Sphinxドキュメント → reStructuredText
+既存プロジェクト → プロジェクトの規約に従う
+
+copy
+2. Googleスタイル
+📖 特徴
+最も読みやすい
+
+シンプルで覚えやすい
+
+業界標準
+
+VSCodeなどIDEのサポートが充実
+
+💻 基本構文
+def function_name(arg1, arg2, arg3=None):
+    """
+    1行要約（動詞で始める）
+    
+    詳細な説明（複数行可）
+    
+    Args:
+        arg1 (型): 説明
+        arg2 (型): 説明
+        arg3 (型, optional): 説明。デフォルトはNone
+    
+    Returns:
+        型: 説明
+    
+    Raises:
+        例外名: 条件
+    
+    Example:
+        >>> function_name(1, 2)
+        結果
+    """
+    pass
+
+copy
+🐰 ふわふわ大福店の例
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    Attributes:
+        owner_name (str): 店長の名前
+        stock (int): 在庫数
+        sold (int): 累計販売数
+    
+    Example:
+        >>> shop = DaifukuShop("うさうさ", 20)
+        >>> shop.sell(5)
+        True
+    """
+    
+    def __init__(self, owner_name, stock):
+        """
+        大福店を初期化する
+        
+        Args:
+            owner_name (str): 店長の名前
+            stock (int): 初期在庫数
+        
+        Raises:
+            ValueError: stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+    
+    def sell(self, quantity, price=150, discount=0):
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        Args:
+            quantity (int): 販売個数
+            price (int, optional): 単価。デフォルトは150円
+            discount (float, optional): 割引率（0.0-1.0）。デフォルトは0
+        
+        Returns:
+            int: 売上金額（割引後）
+            None: 在庫不足の場合
+        
+        Raises:
+            ValueError: quantityが0以下の場合
+        
+        Example:
+            >>> shop = DaifukuShop("うさうさ", 20)
+            >>> shop.sell(5)
+            750
+            >>> shop.sell(3, discount=0.1)
+            405
+        
+        Note:
+            在庫不足の場合はNoneを返し、在庫は変更されません。
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        
+        return total
+    
+    def restock(self, quantity):
+        """
+        在庫を補充する
+        
+        Args:
+            quantity (int): 補充個数
+        
+        Raises:
+            ValueError: quantityが0以下の場合
+        """
+        if quantity <= 0:
+            raise ValueError("補充個数は1以上にしてください")
+        
+        self.stock += quantity
+
+copy
+✅ Googleスタイル チートシート
+セクション名     使い方
+─────────────────────────────────
+Args:          引数の説明
+  arg (型): 説明
+  arg (型, optional): 説明。デフォルトは値
+
+Returns:       返り値の説明
+  型: 説明
+
+Yields:        yield文の説明（ジェネレーター）
+  型: 説明
+
+Raises:        例外の説明
+  例外名: 条件
+
+Example:       使用例
+  >>> コード
+  結果
+
+Note:          注意事項
+  説明
+
+Warning:       警告
+  説明
+
+See Also:      関連項目
+  関数名: 説明
+
+copy
+3. NumPyスタイル
+📖 特徴
+科学計算向け
+
+詳細な説明に適している
+
+NumPy、SciPy、pandasで使用
+
+アンダーラインで区切る
+
+💻 基本構文
+def function_name(arg1, arg2, arg3=None):
+    """
+    1行要約
+    
+    詳細な説明
+    
+    Parameters
+    ----------
+    arg1 : 型
+        説明
+    arg2 : 型
+        説明
+    arg3 : 型, optional
+        説明（デフォルト: None）
+    
+    Returns
+    -------
+    型
+        説明
+    
+    Raises
+    ------
+    例外名
+        条件
+    
+    Examples
+    --------
+    >>> function_name(1, 2)
+    結果
+    """
+    pass
+
+copy
+🐰 ふわふわ大福店の例
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    Attributes
+    ----------
+    owner_name : str
+        店長の名前
+    stock : int
+        在庫数
+    sold : int
+        累計販売数
+    
+    Examples
+    --------
+    >>> shop = DaifukuShop("うさうさ", 20)
+    >>> shop.sell(5)
+    True
+    """
+    
+    def __init__(self, owner_name, stock):
+        """
+        大福店を初期化する
+        
+        Parameters
+        ----------
+        owner_name : str
+            店長の名前
+        stock : int
+            初期在庫数
+        
+        Raises
+        ------
+        ValueError
+            stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+    
+    def sell(self, quantity, price=150, discount=0):
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        Parameters
+        ----------
+        quantity : int
+            販売個数
+        price : int, optional
+            単価（デフォルト: 150円）
+        discount : float, optional
+            割引率 0.0-1.0（デフォルト: 0）
+        
+        Returns
+        -------
+        int or None
+            売上金額（割引後）。在庫不足の場合はNone
+        
+        Raises
+        ------
+        ValueError
+            quantityが0以下の場合
+        
+        Examples
+        --------
+        >>> shop = DaifukuShop("うさうさ", 20)
+        >>> shop.sell(5)
+        750
+        >>> shop.sell(3, discount=0.1)
+        405
+        
+        Notes
+        -----
+        在庫不足の場合はNoneを返し、在庫は変更されません。
+        
+        See Also
+        --------
+        restock : 在庫を補充する
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        
+        return total
+    
+    def restock(self, quantity):
+        """
+        在庫を補充する
+        
+        Parameters
+        ----------
+        quantity : int
+            補充個数
+        
+        Raises
+        ------
+        ValueError
+            quantityが0以下の場合
+        """
+        if quantity <= 0:
+            raise ValueError("補充個数は1以上にしてください")
+        
+        self.stock += quantity
+
+copy
+✅ NumPyスタイル チートシート
+セクション名     書き方
+─────────────────────────────────
+Parameters      引数の説明
+----------
+arg : 型
+    説明
+arg : 型, optional
+    説明（デフォルト: 値）
+
+Returns         返り値の説明
+-------
+型
+    説明
+
+Yields          yield文の説明
+------
+型
+    説明
+
+Raises          例外の説明
+------
+例外名
+    条件
+
+Examples        使用例
+--------
+>>> コード
+結果
+
+Notes           注意事項
+-----
+説明
+
+Warnings        警告
+--------
+説明
+
+See Also        関連項目
+--------
+関数名 : 説明
+
+copy
+4. reStructuredTextスタイル
+📖 特徴
+Sphinx標準
+
+Python公式ドキュメントで使用
+
+:param:, :type:, :return: などのフィールド
+
+詳細だが冗長
+
+💻 基本構文
+def function_name(arg1, arg2, arg3=None):
+    """
+    1行要約
+    
+    詳細な説明
+    
+    :param arg1: 説明
+    :type arg1: 型
+    :param arg2: 説明
+    :type arg2: 型
+    :param arg3: 説明（デフォルト: None）
+    :type arg3: 型
+    :return: 説明
+    :rtype: 型
+    :raises 例外名: 条件
+    
+    .. code-block:: python
+    
+        >>> function_name(1, 2)
+        結果
+    """
+    pass
+
+copy
+🐰 ふわふわ大福店の例
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    :ivar owner_name: 店長の名前
+    :vartype owner_name: str
+    :ivar stock: 在庫数
+    :vartype stock: int
+    :ivar sold: 累計販売数
+    :vartype sold: int
+    
+    .. code-block:: python
+    
+        >>> shop = DaifukuShop("うさうさ", 20)
+        >>> shop.sell(5)
+        True
+    """
+    
+    def __init__(self, owner_name, stock):
+        """
+        大福店を初期化する
+        
+        :param owner_name: 店長の名前
+        :type owner_name: str
+        :param stock: 初期在庫数
+        :type stock: int
+        :raises ValueError: stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+    
+    def sell(self, quantity, price=150, discount=0):
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        :param quantity: 販売個数
+        :type quantity: int
+        :param price: 単価（デフォルト: 150円）
+        :type price: int
+        :param discount: 割引率 0.0-1.0（デフォルト: 0）
+        :type discount: float
+        :return: 売上金額（割引後）。在庫不足の場合はNone
+        :rtype: int or None
+        :raises ValueError: quantityが0以下の場合
+        
+        .. code-block:: python
+        
+            >>> shop = DaifukuShop("うさうさ", 20)
+            >>> shop.sell(5)
+            750
+            >>> shop.sell(3, discount=0.1)
+            405
+        
+        .. note::
+           在庫不足の場合はNoneを返し、在庫は変更されません。
+        
+        .. seealso::
+           :func:`restock` - 在庫を補充する
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        
+        return total
+    
+    def restock(self, quantity):
+        """
+        在庫を補充する
+        
+        :param quantity: 補充個数
+        :type quantity: int
+        :raises ValueError: quantityが0以下の場合
+        """
+        if quantity <= 0:
+            raise ValueError("補充個数は1以上にしてください")
+        
+        self.stock += quantity
+
+copy
+✅ reStructuredTextスタイル チートシート
+フィールド           書き方
+─────────────────────────────────
+:param 名前:        引数の説明
+:type 名前:         引数の型
+:return:            返り値の説明
+:rtype:             返り値の型
+:raises 例外名:     例外の説明
+:ivar 名前:         インスタンス変数
+:vartype 名前:      変数の型
+:cvar 名前:         クラス変数
+
+ディレクティブ      書き方
+─────────────────────────────────
+.. note::           注意事項
+.. warning::        警告
+.. code-block::     コードブロック
+.. seealso::        関連項目
+
+copy
+5. Epytextスタイル
+📖 特徴
+Epydoc専用（古い）
+
+@記号を使う
+
+現在はあまり使われない
+
+レガシーコードで見かける
+
+💻 基本構文
+def function_name(arg1, arg2, arg3=None):
+    """
+    1行要約
+    
+    詳細な説明
+    
+    @param arg1: 説明
+    @type arg1: 型
+    @param arg2: 説明
+    @type arg2: 型
+    @param arg3: 説明（デフォルト: None）
+    @type arg3: 型
+    @return: 説明
+    @rtype: 型
+    @raise 例外名: 条件
+    """
+    pass
+
+copy
+🐰 ふわふわ大福店の例
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    @ivar owner_name: 店長の名前
+    @type owner_name: str
+    @ivar stock: 在庫数
+    @type stock: int
+    @ivar sold: 累計販売数
+    @type sold: int
+    """
+    
+    def __init__(self, owner_name, stock):
+        """
+        大福店を初期化する
+        
+        @param owner_name: 店長の名前
+        @type owner_name: str
+        @param stock: 初期在庫数
+        @type stock: int
+        @raise ValueError: stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+    
+    def sell(self, quantity, price=150, discount=0):
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        @param quantity: 販売個数
+        @type quantity: int
+        @param price: 単価（デフォルト: 150円）
+        @type price: int
+        @param discount: 割引率 0.0-1.0（デフォルト: 0）
+        @type discount: float
+        @return: 売上金額（割引後）。在庫不足の場合はNone
+        @rtype: int or None
+        @raise ValueError: quantityが0以下の場合
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        
+        return total
+
+copy
+✅ Epytextスタイル チートシート
+タグ                書き方
+─────────────────────────────────
+@param 名前:        引数の説明
+@type 名前:         引数の型
+@return:            返り値の説明
+@rtype:             返り値の型
+@raise 例外名:      例外の説明
+@ivar 名前:         インスタンス変数
+@cvar 名前:         クラス変数
+@note:              注意事項
+@warning:           警告
+@see:               関連項目
+
+copy
+6. 型ヒント方式
+📖 特徴
+Python 3.5以降の標準
+
+コード自体に型情報を記述
+
+最も現代的
+
+IDEの補完が最強
+
+mypy等の型チェッカーで検証可能
+
+💻 基本構文
+from typing import Optional, List, Dict
+
+def function_name(
+    arg1: int,
+    arg2: str,
+    arg3: Optional[float] = None
+) -> int:
+    """
+    1行要約
+    
+    詳細な説明（型情報は関数定義に書くので、docstringは簡潔に）
+    
+    Args:
+        arg1: 説明（型は省略可）
+        arg2: 説明
+        arg3: 説明。デフォルトはNone
+    
+    Returns:
+        説明
+    
+    Raises:
+        ValueError: 条件
+    """
+    pass
+
+copy
+🐰 ふわふわ大福店の例（完全版）
+from typing import Optional, Dict, List
+
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    Attributes:
+        owner_name: 店長の名前
+        stock: 在庫数
+        sold: 累計販売数
+    """
+    
+    def __init__(self, owner_name: str, stock: int) -> None:
+        """
+        大福店を初期化する
+        
+        Args:
+            owner_name: 店長の名前
+            stock: 初期在庫数
+        
+        Raises:
+            ValueError: stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name: str = owner_name
+        self.stock: int = stock
+        self.sold: int = 0
+    
+    def sell(
+        self,
+        quantity: int,
+        price: int = 150,
+        discount: float = 0
+    ) -> Optional[int]:
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        Args:
+            quantity: 販売個数
+            price: 単価。デフォルトは150円
+            discount: 割引率（0.0-1.0）。デフォルトは0
+        
+        Returns:
+            売上金額（割引後）。在庫不足の場合はNone
+        
+        Raises:
+            ValueError: quantityが0以下の場合
+        
+        Example:
+            >>> shop = DaifukuShop("うさうさ", 20)
+            >>> shop.sell(5)
+            750
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total: int = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        
+        return total
+    
+    def restock(self, quantity: int) -> None:
+        """
+        在庫を補充する
+        
+        Args:
+            quantity: 補充個数
+        
+        Raises:
+            ValueError: quantityが0以下の場合
+        """
+        if quantity <= 0:
+            raise ValueError("補充個数は1以上にしてください")
+        
+        self.stock += quantity
+    
+    def get_stats(self) -> Dict[str, any]:
+        """
+        統計情報を取得する
+        
+        Returns:
+            店舗の統計情報を含む辞書
+        """
+        return {
+            'owner': self.owner_name,
+            'stock': self.stock,
+            'sold': self.sold
+        }
+    
+    def get_sales_history(self) -> List[Dict[str, int]]:
+        """
+        販売履歴を取得する（サンプル）
+        
+        Returns:
+            販売履歴のリスト
+        """
+        return [
+            {'quantity': 5, 'revenue': 750},
+            {'quantity': 3, 'revenue': 450}
+        ]
+
+copy
+✅ 型ヒント チートシート
+from typing import (
+    List, Dict, Set, Tuple,
+    Optional, Union, Any,
+    Callable, Iterator, Generator
+)
+
+# 基本型
+def func(x: int, y: str, z: float) -> bool:
+    pass
+
+# リスト・辞書
+def func(items: List[str]) -> Dict[str, int]:
+    pass
+
+# Optional（Noneの可能性）
+def func(x: Optional[int] = None) -> Optional[str]:
+    pass
+
+# Union（複数の型）
+def func(x: Union[int, str]) -> Union[bool, None]:
+    pass
+
+# タプル
+def func() -> Tuple[int, str, float]:
+    return 1, "a", 1.0
+
+# 関数型
+def func(callback: Callable[[int, str], bool]) -> None:
+    pass
+
+# Any（任意の型）
+def func(x: Any) -> Any:
+    pass
+
+copy
+7. 完全比較表
+📊 5大記法の比較
+項目 Google NumPy reST Epytext 型ヒント 読みやすさ ★★★★★ ★★★★☆ ★★★☆☆ ★★☆☆☆ ★★★★★ 書きやすさ ★★★★★ ★★★☆☆ ★★☆☆☆ ★★☆☆☆ ★★★★☆ IDE補完 ★★★★☆ ★★★☆☆ ★★★☆☆ ★★☆☆☆ ★★★★★ 型チェック ❌ ❌ ❌ ❌ ✅ 学習コスト 低 中 中 中 中 ドキュメント生成 ✅ ✅ ✅ ✅ ✅ 推奨度 ★★★★★ ★★★★☆ ★★★☆☆ ★☆☆☆☆ ★★★★★
+
+📝 同じ関数を5つのスタイルで比較
+# ==========================================
+# 1. Googleスタイル
+# ==========================================
+def calculate_total(quantity: int, price: int = 150) -> int:
+    """
+    合計金額を計算する
+    
+    Args:
+        quantity (int): 個数
+        price (int, optional): 単価。デフォルトは150円
+    
+    Returns:
+        int: 合計金額
+    """
+    return quantity * price
+
+
+# ==========================================
+# 2. NumPyスタイル
+# ==========================================
+def calculate_total(quantity: int, price: int = 150) -> int:
+    """
+    合計金額を計算する
+    
+    Parameters
+    ----------
+    quantity : int
+        個数
+    price : int, optional
+        単価（デフォルト: 150円）
+    
+    Returns
+    -------
+    int
+        合計金額
+    """
+    return quantity * price
+
+
+# ==========================================
+# 3. reStructuredTextスタイル
+# ==========================================
+def calculate_total(quantity: int, price: int = 150) -> int:
+    """
+    合計金額を計算する
+    
+    :param quantity: 個数
+    :type quantity: int
+    :param price: 単価（デフォルト: 150円）
+    :type price: int
+    :return: 合計金額
+    :rtype: int
+    """
+    return quantity * price
+
+
+# ==========================================
+# 4. Epytextスタイル
+# ==========================================
+def calculate_total(quantity: int, price: int = 150) -> int:
+    """
+    合計金額を計算する
+    
+    @param quantity: 個数
+    @type quantity: int
+    @param price: 単価（デフォルト: 150円）
+    @type price: int
+    @return: 合計金額
+    @rtype: int
+    """
+    return quantity * price
+
+
+# ==========================================
+# 5. 型ヒント方式（docstringは最小限）
+# ==========================================
+def calculate_total(quantity: int, price: int = 150) -> int:
+    """
+    合計金額を計算する
+    
+    Args:
+        quantity: 個数
+        price: 単価。デフォルトは150円
+    
+    Returns:
+        合計金額
+    """
+    return quantity * price
+
+copy
+8. チートシート
+📋 セクション名対応表
+セクション Google NumPy reST Epytext 引数 Args: Parameters ---------- :param: :type: @param: @type: 返り値 Returns: Returns ------- :return: :rtype: @return: @rtype: 例外 Raises: Raises ------ :raises: @raise: 使用例 Example: Examples -------- .. code-block:: （記法なし） 注意 Note: Notes ----- .. note:: @note: 警告 Warning: Warnings -------- .. warning:: @warning: 参照 See Also: See Also -------- .. seealso:: @see:
+
+📋 推奨の組み合わせ
+# ✅ 最推奨: Googleスタイル + 型ヒント
+from typing import Optional
+
+def sell(quantity: int, price: int = 150) -> Optional[int]:
+    """
+    大福を販売する
+    
+    Args:
+        quantity: 販売個数
+        price: 単価。デフォルトは150円
+    
+    Returns:
+        売上金額。在庫不足の場合はNone
+    
+    Raises:
+        ValueError: quantityが0以下の場合
+    """
+    pass
+
+
+# ✅ 科学計算なら: NumPyスタイル + 型ヒント
+import numpy as np
+from typing import Union
+
+def analyze_data(data: np.ndarray) -> Union[float, None]:
+    """
+    データを分析する
+    
+    Parameters
+    ----------
+    data : np.ndarray
+        分析対象のデータ
+    
+    Returns
+    -------
+    float or None
+        分析結果。データが不正な場合はNone
+    """
+    pass
+
+copy
+9. 同じコードを5つの記法で
+🐰 完全実装：ふわふわ大福店クラス
+📝 記法1: Googleスタイル
+
+from typing import Optional, Dict
+
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    Attributes:
+        owner_name (str): 店長の名前
+        stock (int): 在庫数
+        sold (int): 累計販売数
+        revenue (int): 累計売上
+    
+    Example:
+        >>> shop = DaifukuShop("うさうさ", 20)
+        >>> shop.sell(5)
+        750
+    """
+    
+    def __init__(self, owner_name: str, stock: int) -> None:
+        """
+        大福店を初期化する
+        
+        Args:
+            owner_name (str): 店長の名前
+            stock (int): 初期在庫数
+        
+        Raises:
+            ValueError: stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+        self.revenue = 0
+    
+    def sell(
+        self,
+        quantity: int,
+        price: int = 150,
+        discount: float = 0
+    ) -> Optional[int]:
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        Args:
+            quantity (int): 販売個数
+            price (int, optional): 単価。デフォルトは150円
+            discount (float, optional): 割引率（0.0-1.0）。デフォルトは0
+        
+        Returns:
+            int: 売上金額（割引後）
+            None: 在庫不足の場合
+        
+        Raises:
+            ValueError: quantityが0以下の場合
+        
+        Example:
+            >>> shop = DaifukuShop("うさうさ", 20)
+            >>> shop.sell(5)
+            750
+            >>> shop.sell(3, discount=0.1)
+            405
+        
+        Note:
+            在庫不足の場合はNoneを返し、在庫は変更されません。
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        self.revenue += total
+        
+        return total
+    
+    def get_stats(self) -> Dict[str, any]:
+        """
+        統計情報を取得する
+        
+        Returns:
+            Dict[str, any]: 以下のキーを持つ辞書
+                - owner (str): 店長名
+                - stock (int): 在庫数
+                - sold (int): 累計販売数
+                - revenue (int): 累計売上
+        """
+        return {
+            'owner': self.owner_name,
+            'stock': self.stock,
+            'sold': self.sold,
+            'revenue': self.revenue
+        }
+
+copy
+📝 記法2: NumPyスタイル
+
+from typing import Optional, Dict
+
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    Attributes
+    ----------
+    owner_name : str
+        店長の名前
+    stock : int
+        在庫数
+    sold : int
+        累計販売数
+    revenue : int
+        累計売上
+    
+    Examples
+    --------
+    >>> shop = DaifukuShop("うさうさ", 20)
+    >>> shop.sell(5)
+    750
+    """
+    
+    def __init__(self, owner_name: str, stock: int) -> None:
+        """
+        大福店を初期化する
+        
+        Parameters
+        ----------
+        owner_name : str
+            店長の名前
+        stock : int
+            初期在庫数
+        
+        Raises
+        ------
+        ValueError
+            stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+        self.revenue = 0
+    
+    def sell(
+        self,
+        quantity: int,
+        price: int = 150,
+        discount: float = 0
+    ) -> Optional[int]:
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        Parameters
+        ----------
+        quantity : int
+            販売個数
+        price : int, optional
+            単価（デフォルト: 150円）
+        discount : float, optional
+            割引率 0.0-1.0（デフォルト: 0）
+        
+        Returns
+        -------
+        int or None
+            売上金額（割引後）。在庫不足の場合はNone
+        
+        Raises
+        ------
+        ValueError
+            quantityが0以下の場合
+        
+        Examples
+        --------
+        >>> shop = DaifukuShop("うさうさ", 20)
+        >>> shop.sell(5)
+        750
+        >>> shop.sell(3, discount=0.1)
+        405
+        
+        Notes
+        -----
+        在庫不足の場合はNoneを返し、在庫は変更されません。
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        self.revenue += total
+        
+        return total
+    
+    def get_stats(self) -> Dict[str, any]:
+        """
+        統計情報を取得する
+        
+        Returns
+        -------
+        dict
+            店舗の統計情報を含む辞書
+            
+            - owner : str
+                店長名
+            - stock : int
+                在庫数
+            - sold : int
+                累計販売数
+            - revenue : int
+                累計売上
+        """
+        return {
+            'owner': self.owner_name,
+            'stock': self.stock,
+            'sold': self.sold,
+            'revenue': self.revenue
+        }
+
+copy
+📝 記法3: reStructuredTextスタイル
+
+from typing import Optional, Dict
+
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    :ivar owner_name: 店長の名前
+    :vartype owner_name: str
+    :ivar stock: 在庫数
+    :vartype stock: int
+    :ivar sold: 累計販売数
+    :vartype sold: int
+    :ivar revenue: 累計売上
+    :vartype revenue: int
+    
+    .. code-block:: python
+    
+        >>> shop = DaifukuShop("うさうさ", 20)
+        >>> shop.sell(5)
+        750
+    """
+    
+    def __init__(self, owner_name: str, stock: int) -> None:
+        """
+        大福店を初期化する
+        
+        :param owner_name: 店長の名前
+        :type owner_name: str
+        :param stock: 初期在庫数
+        :type stock: int
+        :raises ValueError: stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+        self.revenue = 0
+    
+    def sell(
+        self,
+        quantity: int,
+        price: int = 150,
+        discount: float = 0
+    ) -> Optional[int]:
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        :param quantity: 販売個数
+        :type quantity: int
+        :param price: 単価（デフォルト: 150円）
+        :type price: int
+        :param discount: 割引率 0.0-1.0（デフォルト: 0）
+        :type discount: float
+        :return: 売上金額（割引後）。在庫不足の場合はNone
+        :rtype: int or None
+        :raises ValueError: quantityが0以下の場合
+        
+        .. code-block:: python
+        
+            >>> shop = DaifukuShop("うさうさ", 20)
+            >>> shop.sell(5)
+            750
+            >>> shop.sell(3, discount=0.1)
+            405
+        
+        .. note::
+           在庫不足の場合はNoneを返し、在庫は変更されません。
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        self.revenue += total
+        
+        return total
+    
+    def get_stats(self) -> Dict[str, any]:
+        """
+        統計情報を取得する
+        
+        :return: 店舗の統計情報を含む辞書
+        :rtype: dict
+        """
+        return {
+            'owner': self.owner_name,
+            'stock': self.stock,
+            'sold': self.sold,
+            'revenue': self.revenue
+        }
+
+copy
+📝 記法4: Epytextスタイル
+
+from typing import Optional, Dict
+
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    @ivar owner_name: 店長の名前
+    @type owner_name: str
+    @ivar stock: 在庫数
+    @type stock: int
+    @ivar sold: 累計販売数
+    @type sold: int
+    @ivar revenue: 累計売上
+    @type revenue: int
+    """
+    
+    def __init__(self, owner_name: str, stock: int) -> None:
+        """
+        大福店を初期化する
+        
+        @param owner_name: 店長の名前
+        @type owner_name: str
+        @param stock: 初期在庫数
+        @type stock: int
+        @raise ValueError: stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+        self.revenue = 0
+    
+    def sell(
+        self,
+        quantity: int,
+        price: int = 150,
+        discount: float = 0
+    ) -> Optional[int]:
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        @param quantity: 販売個数
+        @type quantity: int
+        @param price: 単価（デフォルト: 150円）
+        @type price: int
+        @param discount: 割引率 0.0-1.0（デフォルト: 0）
+        @type discount: float
+        @return: 売上金額（割引後）。在庫不足の場合はNone
+        @rtype: int or None
+        @raise ValueError: quantityが0以下の場合
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        self.revenue += total
+        
+        return total
+    
+    def get_stats(self) -> Dict[str, any]:
+        """
+        統計情報を取得する
+        
+        @return: 店舗の統計情報を含む辞書
+        @rtype: dict
+        """
+        return {
+            'owner': self.owner_name,
+            'stock': self.stock,
+            'sold': self.sold,
+            'revenue': self.revenue
+        }
+
+copy
+📝 記法5: 型ヒント方式（docstringは最小限）
+
+from typing import Optional, Dict, Any
+
+class DaifukuShop:
+    """
+    大福店クラス
+    
+    大福の在庫管理と販売を行うクラスです。
+    
+    Attributes:
+        owner_name: 店長の名前
+        stock: 在庫数
+        sold: 累計販売数
+        revenue: 累計売上
+    """
+    
+    owner_name: str
+    stock: int
+    sold: int
+    revenue: int
+    
+    def __init__(self, owner_name: str, stock: int) -> None:
+        """
+        大福店を初期化する
+        
+        Args:
+            owner_name: 店長の名前
+            stock: 初期在庫数
+        
+        Raises:
+            ValueError: stockが負の数の場合
+        """
+        if stock < 0:
+            raise ValueError("在庫数は0以上にしてください")
+        
+        self.owner_name = owner_name
+        self.stock = stock
+        self.sold = 0
+        self.revenue = 0
+    
+    def sell(
+        self,
+        quantity: int,
+        price: int = 150,
+        discount: float = 0
+    ) -> Optional[int]:
+        """
+        大福を販売する
+        
+        指定された個数の大福を販売し、売上を計算します。
+        
+        Args:
+            quantity: 販売個数
+            price: 単価。デフォルトは150円
+            discount: 割引率（0.0-1.0）。デフォルトは0
+        
+        Returns:
+            売上金額（割引後）。在庫不足の場合はNone
+        
+        Raises:
+            ValueError: quantityが0以下の場合
+        
+        Example:
+            >>> shop = DaifukuShop("うさうさ", 20)
+            >>> shop.sell(5)
+            750
+        """
+        if quantity <= 0:
+            raise ValueError("個数は1以上にしてください")
+        
+        if quantity > self.stock:
+            return None
+        
+        total: int = int(quantity * price * (1 - discount))
+        self.stock -= quantity
+        self.sold += quantity
+        self.revenue += total
+        
+        return total
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """
+        統計情報を取得する
+        
+        Returns:
+            店舗の統計情報を含む辞書
+        """
+        return {
+            'owner': self.owner_name,
+            'stock': self.stock,
+            'sold': self.sold,
+            'revenue': self.revenue
+        }
+
+copy
+📝 最終チェックリスト
+✅ docstring品質チェック
+【基本】
+□ 三連引用符（"""）を使っている
+□ 関数/クラスの直後に配置
+□ 1行目に要約がある
+□ 要約は動詞で始まっている
+
+【スタイル選択】
+□ プロジェクトの規約を確認した
+□ 一貫したスタイルを使用
+□ 型ヒントと組み合わせている（推奨）
+
+【内容】
+□ すべての引数を説明している
+□ 返り値を説明している
+□ 例外を説明している（必要に応じて）
+□ 使用例がある（複雑な場合）
+
+【推奨スタイル別】
+Googleスタイル:
+  □ Args: セクションがある
+  □ Returns: セクションがある
+  □ 読みやすい形式
+
+NumPyスタイル:
+  □ Parameters セクションがある
+  □ アンダーラインで区切っている
+  □ 科学計算に適した説明
+
+型ヒント:
+  □ 関数定義に型情報を記載
+  □ docstringは簡潔
+  □ mypy等でチェック可能
+
+copy
+🎓 実践演習
+演習1: この関数を5つの記法で書き換えてください
+def calculate_discount(price, rate):
+    if rate < 0 or rate > 1:
+        raise ValueError("割引率は0-1の範囲")
+    return int(price * (1 - rate))
+
+copy
+<details> <summary>解答例（Googleスタイル）</summary>
+
+def calculate_discount(price: int, rate: float) -> int:
+    """
+    割引後の価格を計算する
+    
+    Args:
+        price (int): 元の価格
+        rate (float): 割引率（0.0-1.0）
+    
+    Returns:
+        int: 割引後の価格
+    
+    Raises:
+        ValueError: rateが0-1の範囲外の場合
+    
+    Example:
+        >>> calculate_discount(1000, 0.1)
+        900
+    """
+    if rate < 0 or rate > 1:
+        raise ValueError("割引率は0-1の範囲")
+    return int(price * (1 - rate))
+
+copy
+</details>
+
+📚 まとめ
+🎯 推奨事項
+新規プロジェクト
+
+✅ Googleスタイル + 型ヒント
+- 最も読みやすい
+- 業界標準
+- IDE補完が強力
+
+copy
+科学計算プロジェクト
+
+✅ NumPyスタイル + 型ヒント
+- NumPy/SciPy/pandasとの親和性
+- 詳細な説明に向いている
+
+copy
+Sphinxドキュメント
+
+✅ reStructuredTextスタイル
+- Sphinx標準
+- 自動ドキュメント生成が容易
+
+copy
+レガシーコード
+
+⚠️ プロジェクトの既存スタイルに従う
+- 一貫性が最重要
+
+copy
+💡 ベストプラクティス
+# ✅ 推奨: Googleスタイル + 型ヒント
+from typing import Optional
+
+def sell(quantity: int, price: int = 150) -> Optional[int]:
+    """
+    大福を販売する
+    
+    Args:
+        quantity: 販売個数
+        price: 単価。デフォルトは150円
+    
+    Returns:
+        売上金額。在庫不足の場合はNone
+    """
+    pass
+
+copy
+📋 クイックリファレンス
+やりたいこと 使うべきスタイル 新規プロジェクト Google + 型ヒント データ分析 NumPy + 型ヒント 公式ドキュメント reStructuredText シンプルに 型ヒントのみ
+
+🐰 うさうさ店長からのメッセージ:
+
+「5つの記法を紹介しましたが、迷ったらGoogleスタイル + 型ヒントを使ってください！
+
+重要なのは:
+
+一貫したスタイルを使う
+
+すべての引数と返り値を説明する
+
+型情報を明記する
+
+チーム全体で同じスタイルを使う
+
+最初は完璧を目指さず、まずは書くことから始めましょう。 徐々に詳しく書けるようになります！」
+
+📎 関連記事:
+
+docstring完全ガイド
+
+型ヒント徹底解説
+
+Sphinx自動ドキュメント生成
+
+VSCodeでのdocstring活用
+
+
+
+
+
+
+YUKIKO@BI＆AIを極めたい（転職活動中スカウト歓迎）
+YUKIKO@BI＆AIを極めたい（転職活動中スカウト歓迎）
+生成AIパスポート試験合格に向けて学習中！
+Python3エンジニア認定試験合格
+2025年7月：BIの学習中です！
+
+【技術】
+Python/Django/スクレイピング/業務自動化
+
+
+
+noteプレミアム
+note pro
+よくある質問・noteの使い方
+プライバシー
+クリエイターへのお問い合わせ
+フィードバック
+ご利用規約
+通常ポイント利用特約
+加盟店規約
+資⾦決済法に基づく表⽰
+特商法表記
+投資情報の免責事項
+PyCharm（パイチャーム）のデバッグ方法とPython特殊メソッド一覧とdocstringの備忘録｜YUKIKO@BI＆AIを極めたい（転職活動中スカウト歓迎）
